@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>MyGA</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" type="text/css" href="css/site.css">
+	<script type="text/javascript" src="js/jquery.3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-colorpicker.min.js"></script>
+    <script type="text/javascript" src="js/myga.js"></script>
+	<script type="text/javascript" src="js/site.js"></script>
+</head>
+<body>
+    <div class="container-fluid">  
+        <div class="card float-left" id="config-card" style="width: 400px; margin-top: 15px;">
+          <div class="card-body">
+            <h4 class="card-title">Configuration</h4>
+            <h6 class="card-subtitle mb-2 text-muted">Configure you Algoritm</h6>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Color</label>
+                <div id="color-picker" class="input-group colorpicker-component">
+                    <input type="text" id="color-picker-input" value="#00AABB" class="form-control" />
+                    <span class="input-group-addon"><i></i></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Population size</label>
+                <input type="number" class="form-control" id="populationSize" value="10">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Mutation probability</label>
+                <input type="number" class="form-control" id="mutationProbability" value="0.5">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Maximum generations to stop</label>
+                <input type="number" class="form-control" id="maximumGeneration" value="1000">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Seed (0 for randon seed)</label>
+                <input type="number" class="form-control" id="seed" value="0">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Error margin (%)</label>
+                <input type="number" class="form-control" id="errorMargin" value="10">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Delay to execute (ms) (0 to disable)</label>
+                <input type="number" class="form-control" id="delay" value="0">
+            </div>
+
+            <button id="btnExecute" class="btn btn-primary">Start</button>
+          </div>
+        </div>
+
+        <div class="card float-left" id="process-card" style="width: 600px; margin-top: 15px; margin-left: 15px;">
+          <div class="card-body">
+            <h4 class="card-title">Processing</h4>
+            <h6 class="card-subtitle mb-2 text-muted">The processing</h6>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">The current color</label>
+                <div id="current-color"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Fitness (<span id="fitness-value">0</span>%)</label>
+                <div class="progress">
+                    <div id="fitness-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">The current generation number</label>
+                <input type="number" class="form-control" id="generation-number" value="0" disabled="disabled">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">The best generation number</label>
+                <input type="number" class="form-control" id="better-generation-number" value="0" disabled="disabled">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">The best generation fitness</label>
+                <input type="number" class="form-control" id="better-generation-fitness" value="0" disabled="disabled">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleFormControlInput1">The seed</label>
+                <input type="number" class="form-control" id="seed" value="0" disabled="disabled">
+            </div>
+           
+            <button id="show-history" class="btn btn-primary">Show history</button>
+            <button id="hide-history" class="btn btn-primary display-none">Hide history</button>
+            <table id="history" class="table  display-none"></table>
+          </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(Site.OnReady)
+    </script>
+</body>
+</html>

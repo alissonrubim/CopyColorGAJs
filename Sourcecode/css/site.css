@@ -1,0 +1,22 @@
+.pixel {
+    width: 10px; 
+    height: 10px; 
+    float: left; 
+    margin: 1px;
+}
+
+.large-pixel{
+    width: 40px; 
+    height: 40px; 
+    margin: 1px;
+}
+
+#process-card #current-color {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #d4d4d4;
+}
+
+.display-none{
+    display: none;
+}
