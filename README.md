@@ -1,53 +1,55 @@
 # CopyColorGAJs
-CopyColorJs it's an genetic algorithm thats it's used for copy an RGB color. The logic it's show how a Genetic Algorithm works and understand your conceipt with something. This code can bem helpfull in a classing room, to show for students how you can create a selective generation of subjetcs with some fitness that you define.
+CopyColorJs it's a genetic algorithm that it's used for copy a RGB color, selecting the best population. The logic it's show how a genetic algorithm works and understand how this can be applyed for anything. This code can be helpfull in a class room, to show for the students how you can create a selective generation of subjetcs with some fitness that you define.
 
 ## The Code
-The main code was in **JavaScript**, that is the **MyGa.js** file. It's an object that contains another "classes", like Population, Subject, Gene and, of course, Generation.
+The main code was in **MyGa.js**, that's a **JavaScript** file. The MyGa it's an object that's contains another classes, like Population, Subject, Gene and, of course, Generation. The Generation classe it's the controller of the algorithm. This class make all the work, calling the constructors and methods fo the another classes.
 The Html and CSS was using the Bootstrap 4 for a most beautiful visual design.
 
 ## How this works
-You can configure a lot of things in this algoritm. Basically, you can chose the Population size, the percentual of mutations and the fitness target. You can see mora of the configuration in the table bellow:
+You can configure a lot of things in this algorithm. Basically, you can chose the population size, the percentual of mutations and the fitness target. It's fun to play with, because, each configurations show a diferents results.
 
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/configuration_screenshot.png)
 
+You can see more of the configurations in the table bellow:
+ 
 Option | Type of Value | Description
 ------------ | ------------- | ------------
 Color | RGB Color | It's the target color of the algorithm
-Population size | Integer | The size of the population in the generation. A big population results in a better fitness, but, can slow down the process 
-Mutation probability | Float (0-100) | It's the probability of one subject receive an mutation in your genes.
-Maximum generations to stop | Integer | The maximum cicles of generation until quit the algorithm
-Seed | Integer | The seed usede for generate the random numbers in the process. Note that the seed its dependente of the every parameters on the screen 
+Population size | Integer | The size of the population in the generation. A big population results in a better fitness, but, can slow down the process. 
+Mutation probability | Float (0-100) | It's the probability of one subject received a mutation in your genes.
+Maximum generations to stop | Integer | The maximum cicles of generation until quit the algorithm.
+Seed | Integer | The seed used for generate the random numbers in the process. Note that the seed it's dependent of the every parameters on the screen. 
 Error margin | Float (0-100) | It's the erro that can be tolerated in the algorithm. For example: i want a color that can be 95% like the target color, so, the error margin is 5% (100-95).
-Delay to execute | Integer | The delay between the generations cicles. The number represents miliseconds. 
+Delay to execute | Integer | The delay between the generations. The number represents milliseconds. 
 
 ## The results
-You can see the processing process when the script is working. Some data is showed for you to follow the process.
+You can see the processing process when the script is working. Some data is shown for you to follow the process.
 
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/result_screenshot.png)
 
 Data | Description
 ------------ | -------------
-Fitness | Show an progressbar with the current fitness in percent. You can see if your current generation it's close to the fitness target.
+Fitness | Show a progress bar with the current fitness in percent. You can see if your current generation it's close to the fitness target.
 Current generation number | The current generation number (generationIndex + 1). That's the number of generations that was created until now.
 Best generation number | It's the best generation number until now.
 Best generation fitness | It's the fitness of the best generation until now.
 Seed | The seed used to run the current process.
 
 ### History of generations
-That's is the bauty of this code. You can see the history of the generations. You have the generation number (in order of creation), the population visual, and the generation fitness.
+That's the beauty of this code. You can see the history of the generations. You have the generation number (in order of creation), the population in a visual table, and the generation fitness.
 
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/history_screenshot.png)
 
-You can compare the first generation with the last generation and see how the population glowup with the time:
+You can compare the first generation with the last generation and see how the population grown up with the time:
 
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/first_vs_last_screenshot.png)
 
 ## What is missing?
-I had some things to do in this code. Improve the process and make better to understand. Let me show to you that i have and mind, and let the tasklist that is missing in this project:
+I have some things to do in this code, like improve the process and make better to understand. Let me show to you that i have and mind, and let the tasklist that is missing in this project:
 
 - [ ] Reset/Clear the process before start again
 - [ ] Stop the algorithm and continue
 - [ ] Show step by step of the process (the population selection, the gene mutations and etc...)
 - [ ] Generate some report, for generations, to show how growup it's the percentual
 
-> If you want to help me to improve this code. Please, send me a message or contact me by the Twitter [@alissonrubim](http://twitter.com/alissonrubim). I'll be glade to work with you. :+1:
+> If you want to help me to improve this code, please, send me a message or contact me by the Twitter [@alissonrubim](http://twitter.com/alissonrubim). I'll be glade to work with you. :+1:
