@@ -20,4 +20,14 @@ Seed | Integer | The seed usede for generate the random numbers in the process. 
 Error margin | Float (0-100) | It's the erro that can be tolerated in the algorithm. For example: i want a color that can be 95% like the target color, so, the error margin is 5% (100-95).
 Delay to execute | Integer | The delay between the generations cicles. The number represents miliseconds. 
 
+## The results
+You can see the processing process when the script is working. Some data is showed for you to follow the process.
+
+Data | Description
+------------ | -------------
+Fitness | Show an progressbar with the current fitness in percent. You can see if your current generation it's close to the fitness target.
+Current generation number | The current generation number (generationIndex + 1). That's the number of generations that was created until now.
+Best generation number | It's the best generation number until now.
+Best generation fitness | It's the fitness of the best generation until now.
+Seed | The seed used to run the current process.
 
