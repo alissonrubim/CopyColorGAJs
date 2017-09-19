@@ -23,6 +23,8 @@ Delay to execute | Integer | The delay between the generations cicles. The numbe
 ## The results
 You can see the processing process when the script is working. Some data is showed for you to follow the process.
 
+![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/result_screenshot.png)
+
 Data | Description
 ------------ | -------------
 Fitness | Show an progressbar with the current fitness in percent. You can see if your current generation it's close to the fitness target.
@@ -30,4 +32,14 @@ Current generation number | The current generation number (generationIndex + 1).
 Best generation number | It's the best generation number until now.
 Best generation fitness | It's the fitness of the best generation until now.
 Seed | The seed used to run the current process.
+
+### History of generations
+That's is the bauty of this code. You can see the history of the generations. You have the generation number (in order of creation), the population visual, and the generation fitness.
+
+![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/history_screenshot.png)
+
+You can compare the first generation with the last generation and see how the population glowup with the time:
+
+![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/first_vs_last_screenshot.png)
+
 
