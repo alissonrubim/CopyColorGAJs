@@ -19,7 +19,7 @@ Population size | Integer | The size of the population in the generation. A big 
 Mutation probability | Float (0-100) | It's the probability of one subject received a mutation in your genes.
 Maximum generations to stop | Integer | The maximum cicles of generation until quit the algorithm.
 Seed | Integer | The seed used for generate the random numbers in the process. Note that the seed it's dependent of the every parameters on the screen. 
-Error margin | Float (0-100) | It's the erro that can be tolerated in the algorithm. For example: i want a color that can be 95% like the target color, so, the error margin is 5% (100-95).
+Error margin | Float (0-100) | It's the error that can be tolerated in the algorithm. For example: i want a color that can be 95% like the target color, so, the error margin is 5% (100-95).
 Delay to execute | Integer | The delay between the generations. The number represents milliseconds. 
 
 ## The results
