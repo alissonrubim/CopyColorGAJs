@@ -18,19 +18,19 @@ Color | RGB Color | It's the target color of the algorithm
 Population size | Integer | The size of the population in the generation. A big population results in a better fitness, but, can slow down the process. 
 Mutation probability | Float (0-100) | It's the probability of one subject received a mutation in its/his genes.
 Maximum generations to stop | Integer | The maximum cicles of generation until quit the algorithm.
-Seed | Integer | The seed used for generate the random numbers in the process. Note that the seed it's dependent of the every parameters on the screen. 
-Error margin | Float (0-100) | It's the error that can be tolerated in the algorithm. For example: i want a color that can be 95% like the target color, so, the error margin is 5% (100-95).
+Seed | Integer | The seed used for generate the random numbers in the process. Note that the seed is dependent of every parameters on the screen. 
+Error margin | Float (0-100) | It's the error that can be tolerated in the algorithm. For example: I want a color that can be 95% like the target color, so, the error margin is 5% (100-95).
 Delay to execute | Integer | The delay between the generations. The number represents milliseconds. 
 
 ## The results
-You can see the processing process when the script is working. Some data is shown for you to follow the process.
+You can see the process processing when the script is working. Some data is shown for you to follow the process.
 
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/result_screenshot.png)
 
 Data | Description
 ------------ | -------------
-Fitness | Show a progress bar with the current fitness in percent. You can see if your current generation it's close to the fitness target.
-Current generation number | The current generation number (generationIndex + 1). That's the number of generations that was created until now.
+Fitness | Show a progress bar with the current fitness in percent. You can see if your current generation is close to the fitness target.
+Current generation number | The current generation number (generationIndex + 1). That's the number of generations that were created until now.
 Best generation number | It's the best generation number until now.
 Best generation fitness | It's the fitness of the best generation until now.
 Seed | The seed used to run the current process.
