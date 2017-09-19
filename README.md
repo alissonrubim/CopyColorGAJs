@@ -50,3 +50,4 @@ I had some things to do in this code. Improve the process and make better to und
 - [ ] Show step by step of the process (the population selection, the gene mutations and etc...)
 - [ ] Generate some report, for generations, to show how growup it's the percentual
 
+> If you want to help me to improve this code. Please, send me a message or contact me by the Twitter [@alissonrubim](http://twitter.com/alissonrubim). I'll be glade to work with you. :+1:
