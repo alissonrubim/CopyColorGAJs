@@ -45,11 +45,11 @@ You can compare the first generation with the last generation and see how the po
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/first_vs_last_screenshot.png)
 
 ## What is missing?
-I still have some things to do in this code, like improve the process and make it better to understand. Let me show you that i have in mind, and I'll let the task list of that is missing in this project:
+I still have some things to do in this code, like improve the process and make it better to understand. Let me show you that i have in mind, and I'll let the task list of what is missing in this project:
 
 - [ ] Reset/Clear the process before start again
 - [ ] Stop the algorithm and continue
 - [ ] Show step by step of the process (the population selection, the gene mutations and etc...)
-- [ ] Generate some report, for generations, to show how growup it's the percentual
+- [ ] Generate some report, for generations, to show how grow up the percentual
 
 > If you want to help me to improve this code, please, send me a message or contact me by the Twitter [@alissonrubim](http://twitter.com/alissonrubim). I'll be glade to work with you. :+1:
