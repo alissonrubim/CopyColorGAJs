@@ -8,7 +8,7 @@ The Html and CSS was using the Bootstrap 4 for a most beautiful visual design.
 ## How this works
 You can configure a lot of things in this algoritm. Basically, you can chose the Population size, the percentual of mutations and the fitness target. You can see mora of the configuration in the table bellow:
 
-![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/configuration_screenshot.png)
+![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/configuration_screenshot.png | width=48)
 
 Option | Type of Value | Description
 ------------ | ------------- | ------------
