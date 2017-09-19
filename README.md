@@ -1,5 +1,5 @@
 # CopyColorGAJs
-CopyColorJs is a genetic algorithm that is used for copy a RGB color, selecting the best population. The logic it's show how a genetic algorithm works and understand how this can be applied for anything. This code can be helpful in a classroom to show to the students how you can create a selective generation of subjects with some fitness that you define.
+CopyColorJs is a genetic algorithm that is used for copy a RGB color, selecting the best population. The logic is show how a genetic algorithm works and understand how this can be applied for anything. This code can be helpful in a classroom to show to the students how you can create a selective generation of subjects with some fitness that you define.
 
 ## The Code
 The main code was in **MyGa.js**, that's a **JavaScript** file. The MyGa is an object that contains another classes, like Population, Subject, Gene and, of course, Generation. The Generation class is the controller of the algorithm. This class makes all the work, calling the constructors and methods on another classes.
