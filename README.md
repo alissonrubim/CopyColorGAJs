@@ -6,7 +6,7 @@ The main code was in **MyGa.js**, that's a **JavaScript** file. The MyGa is an o
 The Html and CSS were using the Bootstrap 4 for a most beautiful visual design.
 
 ## How this works
-You can configure a lot of things in this algorithm. Basically, you can chose the population size, the percentual of mutations and the fitness target. It's fun to play with, because, each configurations show a diferents results.
+You can configure a lot of things in this algorithm. Basically, you can choose the population size, the percentual of mutations and the fitness target. It's fun to play with, because, each configurations show a diferents results.
 
 ![Screenshot of the configurations](https://github.com/alissonrubim/CopyColorGAJs/blob/master/Screenshots/configuration_screenshot.png)
 
