@@ -1,5 +1,5 @@
 # PixelCopy
-![Screenshot of the configurations](https://github.com/alissonrubim/PixelCopy/blob/master/Sourcecode/img/logo_small.png)
+![Logo](https://github.com/alissonrubim/PixelCopy/blob/master/Sourcecode/img/logo_small.png)
 
 PixelCopy is a genetic algorithm that is used for copy a RGB color, selecting the best population. The logic is show how a genetic algorithm works and understand how this can be applied for anything. This code can be helpful in a classroom to show to the students how you can create a selective generation of subjects with some fitness that you define.
 
