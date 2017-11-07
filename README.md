@@ -49,8 +49,8 @@ You can compare the first generation with the last generation and see how the po
 ## What is missing?
 I still have some things to do in this code, like improve the process and make it better to understand. Let me show you that i have in mind, and I'll let the task list of what is missing in this project:
 
-- [ ] Reset/Clear the process before start again
-- [ ] Stop the algorithm and continue
+- [X] Reset/Clear the process before start again
+- [X] Stop the algorithm and continue
 - [ ] Show step by step of the process (the population selection, the gene mutations and etc...)
 - [ ] Generate some report, for generations, to show how grow up the percentual
 
