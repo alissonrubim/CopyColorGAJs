@@ -12,7 +12,11 @@ Site.Config = {};
 Site.OnReady = function(){
     $('#color-picker').colorpicker();
     $('#btnExecute').click(function(){
-        Site.Start();
+        var status = $('#btnExecute').attr('data-status');
+        if(status == '0')
+            Site.Start();
+        else
+            Site.Stop();
     });
     $('#process-card #show-history').click(function(){
         $('#process-card #history').show();
@@ -29,7 +33,6 @@ Site.OnReady = function(){
 
 /* - Start the executation - */
 Site.Start = function(){
-    $('#btnExecute').attr('disabled', 'disable');
     Site.Clear();
 
     //Load the selected color 
@@ -81,6 +84,7 @@ Site.Start = function(){
     $("#process-card #seed").val(MyGA.Random.Seed);
 
     Site.Config = {
+        Debug: $('#checkbox-debug').is(':checked'),
         GenerationBetterFitness: 100 - errorMargin,
         PopulationSize: populationSize, //Tamanho da população (no caso, em pixels)
         PopulationMutationProvability: mutationProbability, //Provabilidade de mutação da população
@@ -91,24 +95,29 @@ Site.Start = function(){
             OnSubjectFitness: Site.OnSubjectFitness,
             OnValidateGeneration: Site.OnValidateGeneration,
             OnGenerateRandomGeneValue: Site.OnGenerateRandomGeneValue,
-            OnFinish: Site.OnFinish
+            OnComplete: Site.OnComplete,
+            OnStop: Site.OnStop,
+            OnGiveUp: Site.OnGiveUp
         }
     }
 
 	Site.Generation = new MyGA.Controller.Generation(Site.Config);
 	Site.Generation.Start();
+    $('#btnExecute').attr('data-status', '1');
+    $('#btnExecute').html('Stop');
 }
-
-
-
-
-
 
 
 
 /* - Restart the page - */
 Site.Clear = function(){
-    
+    $('#process-card #history').html('');
+    $('#process-card #generation-number').val(0);
+    $('#process-card #better-generation-number').val(0);
+    $('#process-card #better-generation-fitness').val(0);
+    $('#process-card #seed').val(0);
+    Site.DrawColor(0,0,0);
+    Site.HideAlertBox();
 }
 
 
@@ -205,10 +214,48 @@ Site.OnSubjectFitness = function(subject) {
     return fitness;
 }
 
+Site.Stop = function(){
+    Site.Generation.Stop();
+}
+
+Site.OnStop = function(generation){
+    Site.ShowAlertBox("The processing was stopped by the user!");
+    Site.OnFinish(generation);
+}
+
+Site.OnComplete = function(generation){
+    Site.OnFinish(generation);
+    Site.ShowAlertBox('Welldone! The processing was completed!', 'success')
+}
+
+Site.OnGiveUp = function(generation){
+    Site.ShowAlertBox("The maximum number of generations was achieved!");
+    Site.OnFinish(generation);
+}
+
+Site.ShowAlertBox = function(msg, type){
+    $('#process-card #alert-box').html(msg);
+    $('#process-card #alert-box')
+        .removeClass("alert-success")
+        .removeClass("alert-warning");
+
+    if(type == "success")
+        $('#process-card #alert-box').addClass("alert-success")
+    else
+        $('#process-card #alert-box').addClass("alert-warning")
+
+    $('#process-card #alert-box').show();
+}
+
+Site.HideAlertBox = function(msg){
+    $('#process-card #alert-box').hide();
+}
+
 /* - On generation finish - */
 Site.OnFinish = function(generation){
     Site.DrawCurrentGeneratioColor(generation);
-    $('#btnExecute').removeAttr('disabled');
+    $('#btnExecute').attr('data-status', '0');
+    $('#btnExecute').html('Start');
 }
 
 Site.DrawCurrentGeneratioColor = function(generation){
@@ -226,7 +273,11 @@ Site.DrawCurrentGeneratioColor = function(generation){
     sumG = parseInt(sumG/generation.Population.Subjects.length)
     sumB = parseInt(sumB/generation.Population.Subjects.length)
 
-    $('#process-card #current-color').html('<div style="background-color: rgb(' + sumR + ',' + sumG + ',' + sumB + ');" class="large-pixel"></div>')
+    Site.DrawColor(sumR, sumG, sumB);
+}
+
+Site.DrawColor = function(r,g,b){
+    $('#process-card #current-color').html('<div style="background-color: rgb(' + r + ',' + g + ',' + b + ');" class="large-pixel"></div>')
 }
 
 Site.ShowCurrentPopulation = function(){

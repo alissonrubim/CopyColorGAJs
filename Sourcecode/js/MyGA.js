@@ -23,6 +23,7 @@ MyGA.Array.Shuffle = function (arr) {
     return newArr;
 }
 
+
 /********************************************************
     Random System
 ********************************************************/
@@ -44,12 +45,11 @@ MyGA.Random.Get = function () {
 ********************************************************/
 MyGA.Log = new Object();
 MyGA.Log.Info = function(){
-    console.log.apply(console, arguments);
+    if(MyGA.Log.Debug)
+        console.log.apply(console, arguments);
 }
 
-MyGA.Log.Debug = function(){
-    console.log.apply(console, arguments);
-}
+MyGA.Log.Debug = false;
 
 /********************************************************
     Thread System
@@ -110,6 +110,7 @@ MyGA.Controller.Generation = function(cfg){
                 Generation: this
             }
         });
+        MyGA.Log.Debug = this.Configuration.Debug;
 	    return this;
     }
 
@@ -117,6 +118,12 @@ MyGA.Controller.Generation = function(cfg){
         //Step 01 - Inicialization
         this.Population.Initialize(this.Configuration.PopulationSize);
         this.Thread.Start();
+    }
+
+    this.Stop = function(){
+        MyGA.Log.Info('The program was stoped!');
+        this.Thread.Stop();
+        this.Configuration.Events.OnStop(this);
     }
 
     //Private
@@ -131,16 +138,19 @@ MyGA.Controller.Generation = function(cfg){
         if (self.Population.Subjects.length < self.Configuration.PopulationSize)
             throw "The population is smallest than the PopulationSize configuration";
 
-        if(isMaximumIndex || isValid || self.CurrentIndex == self.MaximumIndex){
-            if (isMaximumIndex)
-                MyGA.Log.Info('The program rechead the MaximumIndex, that is ' + self.MaximumIndex + ' generations');
-            else 
-                MyGA.Log.Info('The program found the best generation, that is ' + self.CurrentIndex + ' generation');
+        if(isMaximumIndex || isValid){
             MyGA.Log.Info("Used seed: " + MyGA.Random.Seed);
 
-            self.Configuration.Events.OnFinish(self);
-
             self.Thread.Stop();
+
+            if (isMaximumIndex){
+                MyGA.Log.Info('The program rechead the MaximumIndex, that is ' + self.MaximumIndex + ' generations');
+                self.Configuration.Events.OnGiveUp(self);
+            }
+            else {
+                MyGA.Log.Info('The program found the best generation, that is ' + self.CurrentIndex + ' generation');
+                self.Configuration.Events.OnComplete(self);
+            }
         }else{
             //Start a new generation...
             self.CurrentIndex++;
