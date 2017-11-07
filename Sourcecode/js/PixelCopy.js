@@ -83,25 +83,29 @@ PixelCopy.Start = function(){
 
     $("#process-card #seed").val(GAEngine.Random.Seed);
 
-    PixelCopy.Config = {
+    PixelCopy.Generation = new GAEngine.Generation({
         Debug: $('#checkbox-debug').is(':checked'),
-        GenerationBetterFitness: 100 - errorMargin,
-        PopulationSize: populationSize, //Tamanho da população (no caso, em pixels)
-        PopulationMutationProvability: mutationProbability, //Provabilidade de mutação da população
-        GenesSize: 3, //Tamanho dos genes, no caso, 3(RGB)
-        GenerationMaximumIndex: maximumGeneration, //Numero máximos de interações até desistir
-        DelayBetweenGenerations: delay,
-        Events : {
-            OnSubjectFitness: PixelCopy.OnSubjectFitness,
-            OnValidateGeneration: PixelCopy.OnValidateGeneration,
-            OnGenerateRandomGeneValue: PixelCopy.OnGenerateRandomGeneValue,
-            OnComplete: PixelCopy.OnComplete,
+        Delay: delay,
+        FitnessTarget: 100 - errorMargin,
+        MaximumIndexToGiveUp: maximumGeneration,
+        Events: {
+            OnCalculateFitness: PixelCopy.OnCalculateGenerationFitness,
+            OnGiveUp: PixelCopy.OnGiveUp,
             OnStop: PixelCopy.OnStop,
-            OnGiveUp: PixelCopy.OnGiveUp
+            OnComplete: PixelCopy.OnComplete
+        },
+        Population: {
+            SubjectsSize: populationSize,
+            MutationProvability: mutationProbability,
+            Subject: {
+                GenesSize: 3,
+                Events: {
+                    OnCalculateFitness: PixelCopy.OnSubjectFitness,
+                    OnCreateRandomGene: PixelCopy.OnGenerateRandomGeneValue,
+                }
+            }
         }
-    }
-
-    PixelCopy.Generation = new GAEngine.Controller.Generation(PixelCopy.Config);
+    });
     PixelCopy.Generation.Start();
     $('#btnExecute').attr('data-status', '1');
     $('#btnExecute').html('Stop');
@@ -131,7 +135,7 @@ PixelCopy.OnGenerateRandomGeneValue = function() {
 
 PixelCopy.BetterGenerationIndex = 0;
 PixelCopy.BetterGenerationFitness = 0;
-PixelCopy.OnValidateGeneration = function(generation){
+PixelCopy.OnCalculateGenerationFitness = function(generation){
     /*
         A cada ciclo completado, a população é validade para saber se 
         é uma população boa ou não.
@@ -143,9 +147,7 @@ PixelCopy.OnValidateGeneration = function(generation){
     var arrImage = new Array();
     var count = 0;
     for(var i = 0; i < population.Subjects.length; i++){
-        var subjectFitness = population.Subjects[i].Fitness();
-        //if(subjectFitness > PixelCopy.Config.GenerationBetterFitness) //porcentagem de precisão da cor
-        //  count++; //conta quantos são meias aptos nesta geração
+        var subjectFitness = population.Subjects[i].GetFitness();
 
         sumSubjectFitness += subjectFitness;
 
@@ -159,25 +161,24 @@ PixelCopy.OnValidateGeneration = function(generation){
     var fitnessPercentage = sumSubjectFitness / population.Subjects.length;
     
     //Deseha os itens
-    var histId = "hist"+generation.CurrentIndex;
-    $('#process-card #history').append('<tr><td>'+generation.CurrentIndex+'</td><td><div id="'+histId+'" class="pixelWrap"></div></td><td>'+fitnessPercentage+'%</td></tr>');
+    var histId = "hist"+generation.GetCurrentIndex();
+    $('#process-card #history').append('<tr><td>'+generation.GetCurrentIndex()+'</td><td><div id="'+histId+'" class="pixelWrap"></div></td><td>'+fitnessPercentage+'%</td></tr>');
     PixelCopy.DrawArrayToImage($("#"+histId), arrImage);
     PixelCopy.DrawCurrentGeneratioColor(generation);
 
-    $('#process-card #generation-number').val(generation.CurrentIndex);
+    $('#process-card #generation-number').val(generation.GetCurrentIndex());
 
     
     if(sumSubjectFitness >=  PixelCopy.BetterGenerationFitness){
         PixelCopy.BetterGenerationFitness = sumSubjectFitness;
-        PixelCopy.BetterGenerationIndex = generation.CurrentIndex;
+        PixelCopy.BetterGenerationIndex = generation.GetCurrentIndex();
         $('#process-card #better-generation-number').val(PixelCopy.BetterGenerationIndex);
         $('#process-card #better-generation-fitness').val(fitnessPercentage);
     }
     $('#process-card #fitness-bar').css('width', fitnessPercentage + '%');
     $('#process-card #fitness-value').html(fitnessPercentage);
 
-    return fitnessPercentage > PixelCopy.Config.GenerationBetterFitness;
-    //return count >= population.Subjects.length - parseInt(population.Subjects.length * PixelCopy.Config.PopulationMutationProvability/100); //se o totão de aptos for maior que tolerância de mutação
+    return fitnessPercentage;
 }
 
 PixelCopy.OnSubjectFitness = function(subject) {
