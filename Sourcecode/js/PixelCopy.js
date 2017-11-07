@@ -1,22 +1,22 @@
-Site = new Object();
+PixelCopy = new Object();
 
-Site.Generation = false;
-Site.ImageColor = {
+PixelCopy.Generation = false;
+PixelCopy.ImageColor = {
     R: 0,
     G: 0,
     B: 0
 };
-Site.Config = {};
+PixelCopy.Config = {};
 
 /* - Execute on page is Ready - */
-Site.OnReady = function(){
+PixelCopy.OnReady = function(){
     $('#color-picker').colorpicker();
     $('#btnExecute').click(function(){
         var status = $('#btnExecute').attr('data-status');
         if(status == '0')
-            Site.Start();
+            PixelCopy.Start();
         else
-            Site.Stop();
+            PixelCopy.Stop();
     });
     $('#process-card #show-history').click(function(){
         $('#process-card #history').show();
@@ -32,13 +32,13 @@ Site.OnReady = function(){
 }
 
 /* - Start the executation - */
-Site.Start = function(){
-    Site.Clear();
+PixelCopy.Start = function(){
+    PixelCopy.Clear();
 
     //Load the selected color 
     var rgbaColor = $('#config-card #color-picker').data('colorpicker').color.toRGB();
 
-    Site.ImageColor = {
+    PixelCopy.ImageColor = {
         R: rgbaColor.r,
         G: rgbaColor.g,
         B: rgbaColor.b
@@ -76,14 +76,14 @@ Site.Start = function(){
 
     var seed = parseInt($('#config-card #seed').val(), 10);
     if(!isNaN(seed) && seed > 0)
-        MyGA.Random.SetSeed(seed);
+        GAEngine.Random.SetSeed(seed);
 
-	if (MyGA.Random.Seed == undefined)
-        MyGA.Random.SetSeed(parseInt(Math.random() * 100000))
+    if (GAEngine.Random.Seed == undefined)
+        GAEngine.Random.SetSeed(parseInt(Math.random() * 100000))
 
-    $("#process-card #seed").val(MyGA.Random.Seed);
+    $("#process-card #seed").val(GAEngine.Random.Seed);
 
-    Site.Config = {
+    PixelCopy.Config = {
         Debug: $('#checkbox-debug').is(':checked'),
         GenerationBetterFitness: 100 - errorMargin,
         PopulationSize: populationSize, //Tamanho da população (no caso, em pixels)
@@ -92,17 +92,17 @@ Site.Start = function(){
         GenerationMaximumIndex: maximumGeneration, //Numero máximos de interações até desistir
         DelayBetweenGenerations: delay,
         Events : {
-            OnSubjectFitness: Site.OnSubjectFitness,
-            OnValidateGeneration: Site.OnValidateGeneration,
-            OnGenerateRandomGeneValue: Site.OnGenerateRandomGeneValue,
-            OnComplete: Site.OnComplete,
-            OnStop: Site.OnStop,
-            OnGiveUp: Site.OnGiveUp
+            OnSubjectFitness: PixelCopy.OnSubjectFitness,
+            OnValidateGeneration: PixelCopy.OnValidateGeneration,
+            OnGenerateRandomGeneValue: PixelCopy.OnGenerateRandomGeneValue,
+            OnComplete: PixelCopy.OnComplete,
+            OnStop: PixelCopy.OnStop,
+            OnGiveUp: PixelCopy.OnGiveUp
         }
     }
 
-	Site.Generation = new MyGA.Controller.Generation(Site.Config);
-	Site.Generation.Start();
+    PixelCopy.Generation = new GAEngine.Controller.Generation(PixelCopy.Config);
+    PixelCopy.Generation.Start();
     $('#btnExecute').attr('data-status', '1');
     $('#btnExecute').html('Stop');
 }
@@ -110,42 +110,42 @@ Site.Start = function(){
 
 
 /* - Restart the page - */
-Site.Clear = function(){
+PixelCopy.Clear = function(){
     $('#process-card #history').html('');
     $('#process-card #generation-number').val(0);
     $('#process-card #better-generation-number').val(0);
     $('#process-card #better-generation-fitness').val(0);
     $('#process-card #seed').val(0);
-    Site.DrawColor(0,0,0);
-    Site.HideAlertBox();
+    PixelCopy.DrawColor(0,0,0);
+    PixelCopy.HideAlertBox();
 }
 
 
-Site.OnGenerateRandomGeneValue = function() {
-	/*
+PixelCopy.OnGenerateRandomGeneValue = function() {
+    /*
         A cada Gene novo gerado, ele precisa pegar seu valor randômico.
         Esta função entrega o valor de acordo com as caracteristicas do software
     */
-    return parseInt(MyGA.Random.Get() * 256);
+    return parseInt(GAEngine.Random.Get() * 256);
 }
 
-Site.BetterGenerationIndex = 0;
-Site.BetterGenerationFitness = 0;
-Site.OnValidateGeneration = function(generation){
-	/*
-	    A cada ciclo completado, a população é validade para saber se 
-	    é uma população boa ou não.
-	    Retorne True para a população que satisfaz os requisitos de qualidade.
-	*/
+PixelCopy.BetterGenerationIndex = 0;
+PixelCopy.BetterGenerationFitness = 0;
+PixelCopy.OnValidateGeneration = function(generation){
+    /*
+        A cada ciclo completado, a população é validade para saber se 
+        é uma população boa ou não.
+        Retorne True para a população que satisfaz os requisitos de qualidade.
+    */
     var fitnessPercentage = 0;
     var sumSubjectFitness = 0;
     var population = generation.Population;
     var arrImage = new Array();
-	var count = 0;
-	for(var i = 0; i < population.Subjects.length; i++){
+    var count = 0;
+    for(var i = 0; i < population.Subjects.length; i++){
         var subjectFitness = population.Subjects[i].Fitness();
-		//if(subjectFitness > Site.Config.GenerationBetterFitness) //porcentagem de precisão da cor
-		//	count++; //conta quantos são meias aptos nesta geração
+        //if(subjectFitness > PixelCopy.Config.GenerationBetterFitness) //porcentagem de precisão da cor
+        //  count++; //conta quantos são meias aptos nesta geração
 
         sumSubjectFitness += subjectFitness;
 
@@ -154,49 +154,47 @@ Site.OnValidateGeneration = function(generation){
             population.Subjects[i].Genes[1].Value,
             population.Subjects[i].Genes[2].Value,
         ]);
-	}
+    }
 
     var fitnessPercentage = sumSubjectFitness / population.Subjects.length;
     
     //Deseha os itens
     var histId = "hist"+generation.CurrentIndex;
     $('#process-card #history').append('<tr><td>'+generation.CurrentIndex+'</td><td><div id="'+histId+'" class="pixelWrap"></div></td><td>'+fitnessPercentage+'%</td></tr>');
-    Site.DrawArrayToImage($("#"+histId), arrImage);
-    Site.DrawCurrentGeneratioColor(generation);
+    PixelCopy.DrawArrayToImage($("#"+histId), arrImage);
+    PixelCopy.DrawCurrentGeneratioColor(generation);
 
     $('#process-card #generation-number').val(generation.CurrentIndex);
 
     
-    if(sumSubjectFitness >=  Site.BetterGenerationFitness){
-        Site.BetterGenerationFitness = sumSubjectFitness;
-        Site.BetterGenerationIndex = generation.CurrentIndex;
-        $('#process-card #better-generation-number').val(Site.BetterGenerationIndex);
+    if(sumSubjectFitness >=  PixelCopy.BetterGenerationFitness){
+        PixelCopy.BetterGenerationFitness = sumSubjectFitness;
+        PixelCopy.BetterGenerationIndex = generation.CurrentIndex;
+        $('#process-card #better-generation-number').val(PixelCopy.BetterGenerationIndex);
         $('#process-card #better-generation-fitness').val(fitnessPercentage);
     }
     $('#process-card #fitness-bar').css('width', fitnessPercentage + '%');
     $('#process-card #fitness-value').html(fitnessPercentage);
 
-    return fitnessPercentage > Site.Config.GenerationBetterFitness;
-	//return count >= population.Subjects.length - parseInt(population.Subjects.length * Site.Config.PopulationMutationProvability/100); //se o totão de aptos for maior que tolerância de mutação
+    return fitnessPercentage > PixelCopy.Config.GenerationBetterFitness;
+    //return count >= population.Subjects.length - parseInt(population.Subjects.length * PixelCopy.Config.PopulationMutationProvability/100); //se o totão de aptos for maior que tolerância de mutação
 }
 
-Site.OnSubjectFitness = function(subject) {
-	/* 
-		Subject Fitness é a aptidão de um indivíduo dentro da população.
-
-		O individuos recebem uma nota, quando maior sua nota, maior será sua chance de ser selecionado
-		Metodo de Roleta:
-		   Cada individuo recebe 1 ticket + sua nota para entrar na roleta.
-
-	    Dica importante: Não usar propriedades randômicas no Fitness, pois o Fitness é acessado N vezes pelo sistema,
-	    e se em cada vez que ele for acessado ele estiver com um valor diferente, o sistema não consiguirá 
-	    calcular realmente sua aptidão.
-	*/
+PixelCopy.OnSubjectFitness = function(subject) {
+    /* 
+        Subject Fitness é a aptidão de um indivíduo dentro da população.
+        O individuos recebem uma nota, quando maior sua nota, maior será sua chance de ser selecionado
+        Metodo de Roleta:
+           Cada individuo recebe 1 ticket + sua nota para entrar na roleta.
+        Dica importante: Não usar propriedades randômicas no Fitness, pois o Fitness é acessado N vezes pelo sistema,
+        e se em cada vez que ele for acessado ele estiver com um valor diferente, o sistema não consiguirá 
+        calcular realmente sua aptidão.
+    */
     var subjectIndex = subject.Population.Subjects.indexOf(subject);
 
-    var redDiff = Math.abs(Site.ImageColor.R - subject.Genes[0].Value);
-    var greeDiff = Math.abs(Site.ImageColor.G - subject.Genes[1].Value);
-    var blueDiff = Math.abs(Site.ImageColor.B - subject.Genes[2].Value);
+    var redDiff = Math.abs(PixelCopy.ImageColor.R - subject.Genes[0].Value);
+    var greeDiff = Math.abs(PixelCopy.ImageColor.G - subject.Genes[1].Value);
+    var blueDiff = Math.abs(PixelCopy.ImageColor.B - subject.Genes[2].Value);
     
     subject.Genes[0].Fitness = parseInt((255 - redDiff));
     subject.Genes[1].Fitness = parseInt((255 - greeDiff));
@@ -214,26 +212,26 @@ Site.OnSubjectFitness = function(subject) {
     return fitness;
 }
 
-Site.Stop = function(){
-    Site.Generation.Stop();
+PixelCopy.Stop = function(){
+    PixelCopy.Generation.Stop();
 }
 
-Site.OnStop = function(generation){
-    Site.ShowAlertBox("The processing was stopped by the user!");
-    Site.OnFinish(generation);
+PixelCopy.OnStop = function(generation){
+    PixelCopy.ShowAlertBox("The processing was stopped by the user!");
+    PixelCopy.OnFinish(generation);
 }
 
-Site.OnComplete = function(generation){
-    Site.OnFinish(generation);
-    Site.ShowAlertBox('Welldone! The processing was completed!', 'success')
+PixelCopy.OnComplete = function(generation){
+    PixelCopy.OnFinish(generation);
+    PixelCopy.ShowAlertBox('Welldone! The processing was completed!', 'success')
 }
 
-Site.OnGiveUp = function(generation){
-    Site.ShowAlertBox("The maximum number of generations was achieved!");
-    Site.OnFinish(generation);
+PixelCopy.OnGiveUp = function(generation){
+    PixelCopy.ShowAlertBox("The maximum number of generations was achieved!");
+    PixelCopy.OnFinish(generation);
 }
 
-Site.ShowAlertBox = function(msg, type){
+PixelCopy.ShowAlertBox = function(msg, type){
     $('#process-card #alert-box').html(msg);
     $('#process-card #alert-box')
         .removeClass("alert-success")
@@ -247,18 +245,18 @@ Site.ShowAlertBox = function(msg, type){
     $('#process-card #alert-box').show();
 }
 
-Site.HideAlertBox = function(msg){
+PixelCopy.HideAlertBox = function(msg){
     $('#process-card #alert-box').hide();
 }
 
 /* - On generation finish - */
-Site.OnFinish = function(generation){
-    Site.DrawCurrentGeneratioColor(generation);
+PixelCopy.OnFinish = function(generation){
+    PixelCopy.DrawCurrentGeneratioColor(generation);
     $('#btnExecute').attr('data-status', '0');
     $('#btnExecute').html('Start');
 }
 
-Site.DrawCurrentGeneratioColor = function(generation){
+PixelCopy.DrawCurrentGeneratioColor = function(generation){
     var sumR = 0;
     var sumG = 0;
     var sumB = 0;
@@ -273,27 +271,26 @@ Site.DrawCurrentGeneratioColor = function(generation){
     sumG = parseInt(sumG/generation.Population.Subjects.length)
     sumB = parseInt(sumB/generation.Population.Subjects.length)
 
-    Site.DrawColor(sumR, sumG, sumB);
+    PixelCopy.DrawColor(sumR, sumG, sumB);
 }
 
-Site.DrawColor = function(r,g,b){
+PixelCopy.DrawColor = function(r,g,b){
     $('#process-card #current-color').html('<div style="background-color: rgb(' + r + ',' + g + ',' + b + ');" class="large-pixel"></div>')
 }
 
-Site.ShowCurrentPopulation = function(){
-    for (var i = 0; i < Site.Generation.Population.Subjects.length; i++) {
-        console.info(Site.Generation.Population.Subjects[i].Fitness());
+PixelCopy.ShowCurrentPopulation = function(){
+    for (var i = 0; i < PixelCopy.Generation.Population.Subjects.length; i++) {
+        console.info(PixelCopy.Generation.Population.Subjects[i].Fitness());
 
-        for (var j = 0; j < Site.Generation.Population.Subjects[i].Genes.length; j++) {
-            console.info(Site.Generation.Population.Subjects[i].Genes[j]);
+        for (var j = 0; j < PixelCopy.Generation.Population.Subjects[i].Genes.length; j++) {
+            console.info(PixelCopy.Generation.Population.Subjects[i].Genes[j]);
         }
     }
 }
 
-Site.DrawArrayToImage = function(target, arr) {
+PixelCopy.DrawArrayToImage = function(target, arr) {
     target.html("");
     arr.forEach(function (a, b) {
         target.append('<div style="background-color: rgb(' + a[0] + ',' + a[1] + ',' + a[2] + ');" class="pixel"></div>');
     });
 }
-

@@ -1,98 +1,28 @@
-MyGA = new Object();
+window.GAEngine = new Object();
 
-/********************************************************
-    Array Auxiliation
-********************************************************/
-MyGA.Array = new Object();
-MyGA.Array.Clone = function (arr) {
-    return arr.slice(0);
-}
-
-MyGA.Array.Clear = function (arr) {
-    return arr.splice(0);
-}
-
-MyGA.Array.Shuffle = function (arr) {
-    var newArr = MyGA.Array.Clone(arr);
-    for (var i = newArr.length - 1; i > 0; i--) {
-        var j = Math.floor(MyGA.Random.Get() * (i + 1));
-        var temp = newArr[i];
-        newArr[i] = newArr[j];
-        newArr[j] = temp;
-    }
-    return newArr;
-}
-
-
-/********************************************************
-    Random System
-********************************************************/
-MyGA.Random = new Object();
-MyGA.Random.SetSeed = function (seed) {
-    MyGA.Random.Seed = seed;
-    MyGA.Random._seedindex = MyGA.Random.Seed;
-}
-
-MyGA.Random.Get = function () {
-    if (MyGA.Random._seedindex == undefined)
-        throw "Use MyGA.Random.SetSeed to set a seed for the randomyc system";
-    MyGA.Random._seedindex = (MyGA.Random._seedindex * 9301 + 49297) % 233280;
-    return MyGA.Random._seedindex / 233280;
-}
 
 /********************************************************
     Log System
 ********************************************************/
-MyGA.Log = new Object();
-MyGA.Log.Info = function(){
-    if(MyGA.Log.Debug)
+GAEngine.Log = new Object();
+GAEngine.Log.Info = function(){
+    if(GAEngine.Log.Debug)
         console.log.apply(console, arguments);
 }
 
-MyGA.Log.Debug = false;
+GAEngine.Log.Debug = false;
 
-/********************************************************
-    Thread System
-********************************************************/
-MyGA.Thread = new Object();
-MyGA.Thread.Thread = function(cfg){
-    this._constructor = function(cfg) {
-        this.OnLoop = cfg.OnLoop;
-        this.Params = cfg.Params;
-        this.Delay = cfg.Delay || 0; 
-    }
-
-    this.Start = function(){
-        this.IsAlive = true;
-        var self = this;
-
-        var _tick = function(){
-            if(self.IsAlive){
-                self.OnLoop();
-                self._interval = setTimeout(_tick, self.Delay);
-            }
-        }
-
-        self._interval = setTimeout(_tick, 0);
-    }
-
-    this.Stop = function(){
-        this.IsAlive = false;
-    }
-
-    return this._constructor(cfg);
-}
 
 /********************************************************
     Controller Classes
 ********************************************************/
-MyGA.Controller = new Object();
-MyGA.Controller.Generation = function(cfg){
+GAEngine.Controller = new Object();
+GAEngine.Controller.Generation = function(cfg){
     this._constructor = function(cfg) {
         this.Configuration = cfg;
         this.CurrentIndex = 0;
         this.MaximumIndex = this.Configuration.GenerationMaximumIndex;
-        this.Population = new MyGA.Controller.Population({
+        this.Population = new GAEngine.Controller.Population({
             Generation: this,
             GenesSize: this.Configuration.GenesSize,
             MutationProvability: this.Configuration.PopulationMutationProvability,
@@ -103,14 +33,14 @@ MyGA.Controller.Generation = function(cfg){
                 OnGenerateRandomGeneValue: this.Configuration.Events.OnGenerateRandomGeneValue
             }
 		});
-        this.Thread = new MyGA.Thread.Thread({
+        this.Thread = new GAEngine.Thread.Thread({
             OnLoop: this._threadLoop,
             Delay: this.Configuration.DelayBetweenGenerations,
             Params: {
                 Generation: this
             }
         });
-        MyGA.Log.Debug = this.Configuration.Debug;
+        GAEngine.Log.Debug = this.Configuration.Debug;
 	    return this;
     }
 
@@ -121,7 +51,7 @@ MyGA.Controller.Generation = function(cfg){
     }
 
     this.Stop = function(){
-        MyGA.Log.Info('The program was stoped!');
+        GAEngine.Log.Info('The program was stoped!');
         this.Thread.Stop();
         this.Configuration.Events.OnStop(this);
     }
@@ -139,43 +69,43 @@ MyGA.Controller.Generation = function(cfg){
             throw "The population is smallest than the PopulationSize configuration";
 
         if(isMaximumIndex || isValid){
-            MyGA.Log.Info("Used seed: " + MyGA.Random.Seed);
+            GAEngine.Log.Info("Used seed: " + GAEngine.Random.Seed);
 
             self.Thread.Stop();
 
             if (isMaximumIndex){
-                MyGA.Log.Info('The program rechead the MaximumIndex, that is ' + self.MaximumIndex + ' generations');
+                GAEngine.Log.Info('The program rechead the MaximumIndex, that is ' + self.MaximumIndex + ' generations');
                 self.Configuration.Events.OnGiveUp(self);
             }
             else {
-                MyGA.Log.Info('The program found the best generation, that is ' + self.CurrentIndex + ' generation');
+                GAEngine.Log.Info('The program found the best generation, that is ' + self.CurrentIndex + ' generation');
                 self.Configuration.Events.OnComplete(self);
             }
         }else{
             //Start a new generation...
             self.CurrentIndex++;
-            MyGA.Log.Info('Generation ' + self.CurrentIndex + ' started:');
+            GAEngine.Log.Info('Generation ' + self.CurrentIndex + ' started:');
 
             //Step 03 - Selection
-            MyGA.Log.Info('    - Selecting subjects...');
+            GAEngine.Log.Info('    - Selecting subjects...');
             self.Population.Select();
 
             //Step 04 - CrossOver
-            MyGA.Log.Info('    - Cross-over subjects...');
+            GAEngine.Log.Info('    - Cross-over subjects...');
             self.Population.CrossOver();
 
             //Step 05 - Mutation
-            MyGA.Log.Info('    - Mutating subjects...');
+            GAEngine.Log.Info('    - Mutating subjects...');
             self.Population.Mutation();
 
-            MyGA.Log.Info('    - Generation ' + self.CurrentIndex + ' successfully finished.');
+            GAEngine.Log.Info('    - Generation ' + self.CurrentIndex + ' successfully finished.');
         }
     }
 	
 	return this._constructor(cfg);
 }
 
-MyGA.Controller.Population = function(cfg){
+GAEngine.Controller.Population = function(cfg){
     this._constructor = function(cfg) {
         this.Configuration = cfg;
         this.Generation = cfg.Generation;
@@ -184,13 +114,13 @@ MyGA.Controller.Population = function(cfg){
     }
 
     this.Initialize = function(numberOfSubjects) {
-        MyGA.Array.Clear(this.Subjects);
+        GAEngine.Array.Clear(this.Subjects);
         for (var i = 0; i < numberOfSubjects; i++) {
             var subject = this._createSubject();
             subject.Initialize(this.Configuration.GenesSize)
             this.Subjects.push(subject);
         }
-        MyGA.Log.Info('Population was successfully inicializated with ' + this.Subjects.length + ' subjects.');
+        GAEngine.Log.Info('Population was successfully inicializated with ' + this.Subjects.length + ' subjects.');
     }
 
     this.Select = function() {
@@ -202,7 +132,7 @@ MyGA.Controller.Population = function(cfg){
         var eligibleSubjects = new Array();
         while (eligibleSubjects.length < this.Subjects.length) {
             var subjectsFitnessSum = this.Subjects.reduce((a, b) => a + b.Fitness() + 1, 0); //Sum all subjects fitness
-            var randomRoulleteNumber = MyGA.Random.Get() * subjectsFitnessSum + 1; //Generate a random number for the roullete
+            var randomRoulleteNumber = GAEngine.Random.Get() * subjectsFitnessSum + 1; //Generate a random number for the roullete
 
             for (var i = 0; i < this.Subjects.length; i++) {
                 randomRoulleteNumber -= this.Subjects[i].Fitness();
@@ -217,23 +147,23 @@ MyGA.Controller.Population = function(cfg){
     }
 
     this.CrossOver = function() {
-        var fatherArray = MyGA.Array.Clone(this.Subjects);
-        var motherArray = MyGA.Array.Shuffle(this.Subjects);
+        var fatherArray = GAEngine.Array.Clone(this.Subjects);
+        var motherArray = GAEngine.Array.Shuffle(this.Subjects);
 
         var subjectsSize = this.Subjects.length;
-        MyGA.Array.Clear(this.Subjects);
+        GAEngine.Array.Clear(this.Subjects);
 
         //Cross-over the subjects
         for (var i = 0; i < subjectsSize; i++) {
             //Randomize an Cut Point
-            var cutPoint = parseInt(MyGA.Random.Get() * this.Configuration.GenesSize);
+            var cutPoint = parseInt(GAEngine.Random.Get() * this.Configuration.GenesSize);
 
             var newSubject = this._createSubject();
             var firstArray = new Array();
             var secoundArray = new Array();
 
             //Se the array order
-            if (parseInt(MyGA.Random.Get() * 2) == 0) {
+            if (parseInt(GAEngine.Random.Get() * 2) == 0) {
                 firstArray = fatherArray;
                 secoundArray = motherArray;
             } else {
@@ -247,7 +177,7 @@ MyGA.Controller.Population = function(cfg){
 
             function pushGene(currentGene, currentIndex, oppositeArray) {
                 var sumFitness = currentGene.Fitness + oppositeArray[i].Genes[currentIndex].Fitness;
-                var randomNumber = parseInt(MyGA.Random.Get() * sumFitness);
+                var randomNumber = parseInt(GAEngine.Random.Get() * sumFitness);
                 if (randomNumber < currentGene.Fitness)
                     newSubject.Genes[currentIndex] = currentGene;
                 else
@@ -269,11 +199,11 @@ MyGA.Controller.Population = function(cfg){
     this.Mutation = function() { 
         if(this.Configuration.MutationProvability > 0){
             for (var i = 0; i < this.Subjects.length; i++) {
-                var rand = parseInt(MyGA.Random.Get() * 100);
+                var rand = parseInt(GAEngine.Random.Get() * 100);
                 if (rand <= this.Configuration.MutationProvability) {
-                    var mutationIntencity = parseInt(MyGA.Random.Get() * this.Configuration.GenesSize);
+                    var mutationIntencity = parseInt(GAEngine.Random.Get() * this.Configuration.GenesSize);
                     for (var j = 0; j < mutationIntencity; j++) {
-                        this.Subjects[i].Genes[parseInt(MyGA.Random.Get() * this.Configuration.GenesSize)] = new MyGA.Controller.Gene({
+                        this.Subjects[i].Genes[parseInt(GAEngine.Random.Get() * this.Configuration.GenesSize)] = new GAEngine.Controller.Gene({
                             Value: this.Subjects[i].GetRandomGeneValue()
                         });
                     }
@@ -284,7 +214,7 @@ MyGA.Controller.Population = function(cfg){
 
     //Private
     this._createSubject = function() {
-        return new MyGA.Controller.Subject({
+        return new GAEngine.Controller.Subject({
             Population: this,
             Events: {
                 OnFitness: this.Configuration.Events.OnSubjectFitness,
@@ -296,7 +226,7 @@ MyGA.Controller.Population = function(cfg){
 	return this._constructor(cfg);
 }
 
-MyGA.Controller.Subject = function(cfg){
+GAEngine.Controller.Subject = function(cfg){
     this._constructor = function(cfg) {
         this.Configuration = cfg;
         this.Genes = new Array();
@@ -305,9 +235,9 @@ MyGA.Controller.Subject = function(cfg){
     }
 
     this.Initialize = function(numberOfGenes) {
-        MyGA.Array.Clear(this.Genes);
+        GAEngine.Array.Clear(this.Genes);
         for (var i = 0; i < numberOfGenes; i++) {
-            var gene = new MyGA.Controller.Gene({
+            var gene = new GAEngine.Controller.Gene({
                 Value: this.GetRandomGeneValue()
             });
             this.Genes.push(gene);
@@ -329,7 +259,7 @@ MyGA.Controller.Subject = function(cfg){
 }
 
 
-MyGA.Controller.Gene = function(cfg){
+GAEngine.Controller.Gene = function(cfg){
     this._constructor = function(cfg) {
         this.Value = cfg.Value;
         this.Fitness = 0;
