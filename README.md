@@ -1,5 +1,5 @@
 # PixelCopy
-![Logo](https://github.com/alissonrubim/PixelCopy/blob/master/Sourcecode/img/logo_small.png)
+<img src="https://github.com/alissonrubim/PixelCopy/blob/master/Sourcecode/img/logo_small.png" alt="Logo" width="70"/>
 
 PixelCopy is a genetic algorithm that is used for copy a RGB color, selecting the best population. The logic is show how a genetic algorithm works and understand how this can be applied for anything. This code can be helpful in a classroom to show to the students how you can create a selective generation of subjects with some fitness that you define.
 
@@ -10,7 +10,7 @@ The Html and CSS were using the Bootstrap 4 for a most beautiful visual design.
 ## How this works
 You can configure a lot of things in this algorithm. Basically, you can choose the population size, the percentual of mutations and the fitness target. It's fun to play with, because, each configuration shows a diferents results.
 
-![Screenshot of the configurations](https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/configuration_screenshot.png)
+<img src="https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/configuration_screenshot.png" alt="Screenshot" width="320"/>
 
 You can see more of the configurations in the table bellow:
  
@@ -27,7 +27,8 @@ Delay to execute | Integer | The delay between the generations. The number repre
 ## The results
 You can see the process processing when the script is working. Some data is shown for you to follow the process.
 
-![Screenshot of the configurations](https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/result_screenshot.png)
+<img src="https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/result_screenshot.png" alt="Screenshot" width="450"/>
+
 
 Data | Description
 ------------ | -------------
@@ -40,11 +41,11 @@ Seed | The seed used to run the current process.
 ### History of generations
 That's the beauty of this code. You can see the history of the generations. You have the generation number (in order of creation), the population in a visual table, and the generation fitness.
 
-![Screenshot of the configurations](https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/history_screenshot.png)
+<img src="https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/history_screenshot.png" alt="Screenshot" width="380"/>
 
 You can compare the first generation with the last generation and see how the population grown up with the time:
 
-![Screenshot of the configurations](https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/first_vs_last_screenshot.png)
+<img src="https://github.com/alissonrubim/PixelCopy/blob/master/Screenshots/first_vs_last_screenshot.png" alt="Screenshot" width="450"/>
 
 ## What is missing?
 I still have some things to do in this code, like improve the process and make it better to understand. Let me show you that i have in mind, and I'll let the task list of what is missing in this project:
