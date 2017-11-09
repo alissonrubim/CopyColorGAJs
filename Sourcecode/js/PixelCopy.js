@@ -100,8 +100,12 @@ PixelCopy.Start = function(){
             Subject: {
                 GenesSize: 3,
                 Events: {
-                    OnCalculateFitness: PixelCopy.OnSubjectFitness,
-                    OnCreateRandomGene: PixelCopy.OnGenerateRandomGeneValue,
+                    OnCalculateFitness: PixelCopy.OnSubjectFitness
+                },
+                Gene: {
+                    Events: {
+                        OnCreateRandomGeneValue: PixelCopy.OnGenerateRandomGeneValue,
+                    }
                 }
             }
         }

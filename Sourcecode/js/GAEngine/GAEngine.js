@@ -9,7 +9,6 @@ GAEngine.Log.Info = function(){
     if(GAEngine.Log.Debug)
         console.log.apply(console, arguments);
 }
-
 GAEngine.Log.Debug = false;
 
 
@@ -36,7 +35,17 @@ GAEngine.Generation = function(args){
     public.Population = {
         SubjectsSize: 0,
         MutationProvability: 0,
-        Subject: null
+        Subject: {
+            GenesSize: 0,
+            Events: {
+                OnCalculateFitness: false
+            },
+            Gene: {
+                Events: {
+                    OnCreateRandomGeneValue: false
+                }
+            }
+        }
     }
 
     public.Constructor = function (args) {
@@ -53,8 +62,12 @@ GAEngine.Generation = function(args){
             Subject: {
                 GenesSize: args.Population.Subject.GenesSize,
                 Events: {
-                    OnCalculateFitness: args.Population.Subject.Events.OnCalculateFitness,
-                    OnCreateRandomGene: args.Population.Subject.Events.OnCreateRandomGene,
+                    OnCalculateFitness: args.Population.Subject.Events.OnCalculateFitness
+                },
+                Gene: {
+                    Events: {
+                        OnCreateRandomGeneValue: args.Population.Subject.Gene.Events.OnCreateRandomGeneValue
+                    }
                 }
             }
         });
@@ -142,8 +155,12 @@ GAEngine.Population = function(args){
     public.Subject = {
         GenesSize: 0,
         Events: {
-            OnCalculateFitness: false,
-            OnCreateRandomGene: false
+            OnCalculateFitness: false
+        },
+        Gene: {
+            Events: {
+                OnCreateRandomGeneValue: false
+            }
         }
     }
 
@@ -246,9 +263,7 @@ GAEngine.Population = function(args){
                 if (rand <= public.MutationProvability) {
                     var mutationIntencity = parseInt(GAEngine.Random.Get() * public.Subject.GenesSize);
                     for (var j = 0; j < mutationIntencity; j++) {
-                        public.Subjects[i].Genes[parseInt(GAEngine.Random.Get() * public.Subject.GenesSize)] = new GAEngine.Gene({
-                            Value: public.Subjects[i].GenerateRandomGeneValues()
-                        });
+                        public.Subjects[i].CreateGene(parseInt(GAEngine.Random.Get() * public.Subject.GenesSize));
                     }
                 }
             }
@@ -260,8 +275,12 @@ GAEngine.Population = function(args){
             Population: public,
             GenesSize: public.Subject.GenesSize,
             Events: {
-                OnCalculateFitness: public.Subject.Events.OnCalculateFitness,
-                OnCreateRandomGene: public.Subject.Events.OnCreateRandomGene,
+                OnCalculateFitness: public.Subject.Events.OnCalculateFitness
+            },
+            Gene: {
+                Events: {
+                    OnCreateRandomGeneValue: public.Subject.Gene.Events.OnCreateRandomGeneValue,
+                }
             }
         });
     }
@@ -276,15 +295,22 @@ GAEngine.Subject = function(args){
     public.Population = null;
     public.GenesSize = 0;
     public.Events = {
-        OnCreateRandomGene: false,
         OnCalculateFitness: false
     };
+    public.Gene = {
+        Events: {
+            OnCreateRandomGeneValue: false
+        }
+    }
+
+    private.fitness = null;
 
     public.Constructor = function (args) {
         public.Genes = args.Genes || public.Genes;
         public.Population = args.Population || public.Population;
         public.GenesSize = args.GenesSize || public.GenesSize;
         public.Events = args.Events || public.Events;
+        public.Gene = args.Gene || public.Gene;
 
         if(public.Population == null)
             throw "The population can't be null";
@@ -295,23 +321,31 @@ GAEngine.Subject = function(args){
     public.GenerateRandomGenes = function(numberOfGenes){
         public.GenesSize = numberOfGenes;
         GAEngine.Array.Clear(public.Genes);
-        for (var i = 0; i < public.GenesSize; i++) {
-            var gene = new GAEngine.Gene({
-                Value: public.GenerateRandomGeneValues()
-            });
-            public.Genes.push(gene);
-        }
+        for (var i = 0; i < public.GenesSize; i++)
+            public.CreateGene(i);
     }
 
     public.GetFitness = function(){
-        var fitness = public.Events.OnCalculateFitness(public);
-        if (isNaN(fitness))
+        if(private.fitness == null)
+            private.fitness = public.Events.OnCalculateFitness(public);
+
+        if (isNaN(private.fitness))
             throw "The Fitness is not a valid number";
-        return fitness;
+
+        return private.fitness;
     }
 
-    public.GenerateRandomGeneValues = function(){
-        return public.Events.OnCreateRandomGene();
+    public.CreateGene = function(index){
+        var gene = new GAEngine.Gene({
+            Subject: public,
+            Index: index,
+            Events: {
+                OnCreateRandomGeneValue: public.Gene.Events.OnCreateRandomGeneValue
+            }
+        });
+        gene.CreateRandomValue();
+        public.Genes[index] = gene;
+        return gene;
     }
 
     return public.Constructor(args);
@@ -320,13 +354,27 @@ GAEngine.Subject = function(args){
 GAEngine.Gene = function (args) {
     var private = {}, public = this;
 
-    public.Value = 0;
+    public.Value = null;
     public.Fitness = 0;
+    public.Index = 0;
+    public.Subject = null;
+    public.Events = {
+        OnCreateRandomGeneValue: false
+    }
 
     public.Constructor = function (args) {
         public.Value = args.Value || public.Value;
         public.Fitness = args.Fitness || public.Fitness;
+        public.Index = args.Index || public.Index;
+        public.Events = args.Events || public.Events;
+        public.Subject = args.Subject  || public.Subject;
+
         return public;
+    }
+
+    public.CreateRandomValue = function(){
+        public.Value = public.Events.OnCreateRandomGeneValue(public);
+        return public.Value;
     }
 
     return public.Constructor(args);

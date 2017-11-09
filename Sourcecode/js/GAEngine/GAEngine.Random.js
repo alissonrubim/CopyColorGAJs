@@ -13,3 +13,7 @@ GAEngine.Random.Get = function () {
     GAEngine.Random._seedindex = (GAEngine.Random._seedindex * 9301 + 49297) % 233280;
     return GAEngine.Random._seedindex / 233280;
 }
+
+GAEngine.Random.GetBetween =  function(min, max){
+	return parseInt(GAEngine.Random.Get() * (max + 1)) + min
+}
