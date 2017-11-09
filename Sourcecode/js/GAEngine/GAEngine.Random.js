@@ -15,5 +15,5 @@ GAEngine.Random.Get = function () {
 }
 
 GAEngine.Random.GetBetween =  function(min, max){
-	return parseInt(GAEngine.Random.Get() * (max + 1)) + min
+	return parseInt(GAEngine.Random.Get() * max) + min
 }

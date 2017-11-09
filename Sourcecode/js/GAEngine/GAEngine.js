@@ -1,3 +1,8 @@
+/* 
+    v1.0.0 
+    Created by: Alisson Rubim
+*/
+
 window.GAEngine = new Object();
 
 
@@ -93,6 +98,7 @@ GAEngine.Generation = function(args){
         private.mainThread.Stop();
         public.Events.OnStop(public);
     }
+
 
     public.GetCurrentIndex = function(){
         return private.currentIndex;
@@ -331,6 +337,9 @@ GAEngine.Subject = function(args){
 
         if (isNaN(private.fitness))
             throw "The Fitness is not a valid number";
+
+        if (private.fitness < 0)
+            throw "The Fitness can't be a negative number!";
 
         return private.fitness;
     }

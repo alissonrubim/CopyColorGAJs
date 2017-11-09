@@ -2,30 +2,53 @@
     Thread System
 ********************************************************/
 GAEngine.Thread = new Object();
-GAEngine.Thread.Thread = function(cfg){
-    this._constructor = function(cfg) {
-        this.OnLoop = cfg.OnLoop;
-        this.Params = cfg.Params;
-        this.Delay = cfg.Delay || 0; 
+GAEngine.Thread.Thread = function (args) {
+    var private = {}, public = this;
+
+    public.OnLoop = null;
+    public.Params = null;
+    public.Delay = 0;
+
+    private.isAlive = false;
+    private.isPaused = false;
+    private.interval = null;
+
+    public.Constructor = function (args) {
+        public.OnLoop = args.OnLoop;
+        public.Params = args.Params;
+        public.Delay = args.Delay || public.Delay; 
+        return public;
     }
 
-    this.Start = function(){
-        this.IsAlive = true;
-        var self = this;
+    public.Start = function(){
+        private.isAlive = true;
+        private.isPaused = false;
 
         var _tick = function(){
-            if(self.IsAlive){
-                self.OnLoop();
-                self._interval = setTimeout(_tick, self.Delay);
+            if(private.isAlive){
+                if(private.isPaused){
+                    private.interval = setTimeout(_tick, 1);
+                }else{
+                    public.OnLoop();
+                    private.interval = setTimeout(_tick, public.Delay);
+                }
             }
         }
 
-        self._interval = setTimeout(_tick, 0);
+        private.interval = setTimeout(_tick, 0);
     }
 
-    this.Stop = function(){
-        this.IsAlive = false;
+    public.Stop = function(){
+        private.isAlive = false;
     }
 
-    return this._constructor(cfg);
-}
+    public.Pause = function(){
+        private.isPaused = true;
+    }
+
+    public.Continue = function(){
+        private.isPaused = false;
+    }
+
+    return public.Constructor(args);
+};
