@@ -13,7 +13,7 @@ Version | Status
 
 
 ## The Code
-The main code was in **MyGa.js**, that's a **JavaScript** file. The MyGa is an object that contains another classes, like Population, Subject, Gene and, of course, Generation. The Generation class is the controller of the algorithm. This class makes all the work, calling the constructors and methods on another classes.
+The main code was in **<a href="https://github.com/alissonrubim/GAEngine">GAEngine<a>**, that's a **gaengine.js** file. The GAEngine is an object that contains another classes, like Population, Subject, Gene and, of course, Generation. The Generation class is the controller of the algorithm. This class makes all the work, calling the constructors and methods on another classes.
 The Html and CSS were using the Bootstrap 4 for a most beautiful visual design.
 
 ## How this works
